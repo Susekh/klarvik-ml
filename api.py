@@ -1,10 +1,14 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS  # Import CORS
 import pandas as pd
 import joblib
 import random
 
 # Initialize Flask App
 app = Flask(__name__)
+
+# Enable CORS for specific domains
+CORS(app, origins=["https://klarvik.vercel.app", "http://localhost:5173"])
 
 # Load the saved model and preprocessing components
 xgb_model = joblib.load('xgb_model.pkl')
@@ -18,7 +22,7 @@ def calculate_heart_rate(ecg_value):
     return max(60, min(120, int(ecg_value * 100)))
 
 def generate_random_data():
-    """Generate random data for simulation."""
+    """Generate random data for simulation.""" 
     simulated_data = {
         "Humidity": random.uniform(30, 70),  # Normal range
         "HeatIndex": random.uniform(25, 40),  # Normal range
