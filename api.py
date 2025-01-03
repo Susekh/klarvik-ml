@@ -82,13 +82,13 @@ def simulate():
             anomaly_detected = False
 
         response = {
-            "Humidity": simulated_data["Humidity"],
-            "HeatIndex": simulated_data["HeatIndex"],
-            "ECG": simulated_data["ECG"],
-            "Heart Rate": simulated_data["Heart Rate"],
-            "CO": simulated_data["CO"],
-            "Temp": simulated_data["Temp"],
-            "AnomalyDetected": anomaly_detected,
+            "humidity": simulated_data["Humidity"],
+            "heatIndex": simulated_data["HeatIndex"],
+            "ecg": simulated_data["ECG"],
+            "heartRate": simulated_data["Heart Rate"],
+            "co": simulated_data["CO"],
+            "temp": simulated_data["Temp"],
+            "anomalyDetected": anomaly_detected,
             "message": "Anomaly Detected!" if anomaly_detected else "All Safe."
         }
 
