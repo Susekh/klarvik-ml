@@ -20,12 +20,12 @@ def calculate_heart_rate(ecg_value):
 def generate_random_data():
     """Generate random data for simulation."""
     simulated_data = {
-        "Humidity": random.uniform(30, 90),
-        "HeatIndex": random.uniform(20, 45),
-        "ECG": random.uniform(0.5, 1.5),
+        "Humidity": random.uniform(30, 70),  # Normal range
+        "HeatIndex": random.uniform(25, 40),  # Normal range
+        "ECG": random.uniform(0.8, 1.2),  # Normal ECG range
         "Heart Rate": 0,  # Placeholder, will be calculated
-        "CO": random.uniform(0, 50),
-        "Temp": random.uniform(35.5, 40.0),
+        "CO": random.uniform(0, 20),  # Normal CO levels
+        "Temp": random.uniform(36.0, 38.0),  # Normal body temperature
     }
     simulated_data["Heart Rate"] = calculate_heart_rate(simulated_data["ECG"])
     return simulated_data
@@ -42,8 +42,14 @@ def predict():
 
         # Make prediction
         prediction = xgb_model.predict(df)
+
+        # Rarity logic: Make anomaly detection rare (e.g., 5% chance if predicted True)
+        anomaly_detected = bool(prediction[0])
+        if anomaly_detected and random.random() > 0.05:  # 5% chance of keeping it True
+            anomaly_detected = False
+
         response = {
-            "AnomalyDetected": bool(prediction[0])
+            "AnomalyDetected": anomaly_detected
         }
 
         return jsonify(response), 200
@@ -65,6 +71,12 @@ def simulate():
 
         # Make prediction
         prediction = xgb_model.predict(df)
+
+        # Rarity logic: Make anomaly detection rare (e.g., 5% chance if predicted True)
+        anomaly_detected = bool(prediction[0])
+        if anomaly_detected and random.random() > 0.05:  # 5% chance of keeping it True
+            anomaly_detected = False
+
         response = {
             "Humidity": simulated_data["Humidity"],
             "HeatIndex": simulated_data["HeatIndex"],
@@ -72,8 +84,8 @@ def simulate():
             "Heart Rate": simulated_data["Heart Rate"],
             "CO": simulated_data["CO"],
             "Temp": simulated_data["Temp"],
-            "AnomalyDetected": bool(prediction[0]),
-            "message": "Anomaly Detected!" if bool(prediction[0]) else "All Safe."
+            "AnomalyDetected": anomaly_detected,
+            "message": "Anomaly Detected!" if anomaly_detected else "All Safe."
         }
 
         return jsonify(response), 200
